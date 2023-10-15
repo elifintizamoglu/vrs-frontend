@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../style/style.css';
 
 export default function Login() {
@@ -10,41 +10,30 @@ export default function Login() {
     password: "",
   })
   const { userName, password } = user;
-  const jsonUser = JSON.stringify(user);
-  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const navigate = useNavigate();
 
   const OnInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   }
 
-  const clearForm = () => {
-    setUser({
-      userName: "",
-      password: "",
-    });
-  };
-
   const onSubmit = async (e) => {
     e.preventDefault();
-    await axios.get("http://localhost:8080/user/getByUserName/{userName}" + userName, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(() => {
-
-        setSuccessMessage('You have succesfully signed up! Go ahead and sign in.');
-        setErrorMessage('');
-        clearForm();
+    await axios.get("http://localhost:8080/user/getByUserName/" + userName)
+      .then((response) => {
+        if (response.data.password === password) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+          navigate("/home");
+        }
+        else {
+          setErrorMessage('Password is incorrect. Check your password and try again.');
+        }
       })
       .catch(() => {
-        setErrorMessage('This username is already used. Please change it and try again.');
-        setSuccessMessage('');
+        setErrorMessage("User with this username could not found!");
       })
   };
-
-
 
   return (
     <div className="container-login">
@@ -72,7 +61,6 @@ export default function Login() {
           </div>
           <div className='mb-3 px-4'>
             <button type='submit' className='btn btn-primary custom-btn mb-3' >Log In</button>
-            {successMessage && <div className="success-message text-center text-success ">{successMessage}</div>}
             {errorMessage && <div className="error-message text-center text-danger">{errorMessage}</div>}
           </div>
 
