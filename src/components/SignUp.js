@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../style/signUp.css';
+import '../style/style.css';
 import { Link } from 'react-router-dom';
 
 export default function SignUp() {
@@ -47,19 +47,6 @@ export default function SignUp() {
                 .catch(() => {
                     setErrorMessage('This username is already used. Please change it and try again.');
                     setSuccessMessage('');
-                    // Hata durumu
-                    // if (error.response) {
-                    //     // HTTP yanıt durumu ve verileri
-                    //     console.log('HTTP Durum Kodu:', error.response.status);
-                    //     console.log('Hata Verileri:', error.response.data);
-                    // } else if (error.request) {
-                    //     // İstek yapıldı, ancak yanıt alınamadı
-                    //     console.log('İstek Yanıt Alınamadı:', error.request);
-                    // } else {
-                    //     // İstek yaparken bir hata oluştu
-                    //     console.error('Hata:', error.message);
-                    // }
-
                 })
         }
         else {
@@ -119,13 +106,13 @@ export default function SignUp() {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)} />
                     </div>
-                    <div>
+                    <div className='mb-3 px-4'>
                         <button type='submit' className='btn btn-primary custom-btn mb-3' >Sign Up</button>
                         {successMessage && <div className="success-message text-center text-success ">{successMessage}</div>}
                         {errorMessage && <div className="error-message text-center text-danger">{errorMessage}</div>}
                     </div>
 
-                    <Link to="/login" className='text-decoration-none custom-btn'>Have an account? Sign In</Link>
+                    <Link to="/login" className='text-decoration-none custom-btn'>Have an account? Log In</Link>
                 </div>
 
             </form>

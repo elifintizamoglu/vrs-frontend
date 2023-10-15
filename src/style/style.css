@@ -1,0 +1,16 @@
+.custom-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-login {
+    width: 40%;
+    margin-top: 7%;
+    margin-left: 30%; 
+}
+
+.container {
+    width: 50%;
+}
