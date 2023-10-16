@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../style/style.css';
 import { Link } from 'react-router-dom';
 
 export default function SignUp() {
@@ -11,6 +10,11 @@ export default function SignUp() {
         userName: "",
         password: "",
     })
+
+    // const FIRST_NAME_REGEX= /^[a-zA-z][a-zA-Z]{2,23}$/; 
+    // const LAST_NAME_REGEX= /^[a-zA-z][a-zA-Z]{2,23}$/; 
+    // const USER_NAME_REGEX= /^[a-zA-z][a-zA-Z0-9-_]{5,23}$/; 
+    // const PASS_REGEX= /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
     const [confirmPassword, setConfirmPassword] = useState('');
     const { firstName, lastName, userName, password } = user;
