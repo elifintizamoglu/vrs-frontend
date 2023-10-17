@@ -25,6 +25,19 @@ export default function Home() {
   const cars = JSON.parse(localStorage.getItem('cars'));
   console.log(cars);
 
+  const handleDelete = async (index) => {
+    const selectedCar = cars[index];
+    console.log(selectedCar.carId);
+
+    await axios.delete("http://localhost:8080/car/delete/" + selectedCar.carId)
+      .then((response) => {
+        console.log("Car deleted succesfully.");
+      })
+      .catch(() => {
+        console.log("bir hata var");
+      })
+  };
+
 
   return (
     <div className='home overflow-hidden'>
@@ -79,27 +92,6 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* <tr>
-                    <td>My Car</td>
-                    <td>Audi</td>
-                    <td>A5</td>
-                    <td>2015</td>
-                    <td>31 AA 23</td>
-                  </tr>
-                  <tr>
-                    <td>My Car 2</td>
-                    <td>Audi</td>
-                    <td>A6</td>
-                    <td>2016</td>
-                    <td>31 AB 203</td>
-                  </tr>
-                  <tr>
-                    <td>My Car 3</td>
-                    <td>Audi</td>
-                    <td>A3</td>
-                    <td>2023</td>
-                    <td>31 BA 23</td>
-                  </tr> */}
                   {cars.map((item, index) => (
                     <tr key={index}>
                       <td>{item.carName}</td>
@@ -108,7 +100,7 @@ export default function Home() {
                       <td>{item.year}</td>
                       <td>{item.numberPlate}</td>
                       <td>
-                        <FontAwesomeIcon icon={faTrash} />
+                        <FontAwesomeIcon icon={faTrash} onClick={() => handleDelete(index)} />
                       </td>
                     </tr>
                   ))}
