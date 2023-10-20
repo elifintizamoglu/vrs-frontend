@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import LeftNavbar from './LeftNavbar';
 
 export default function Home() {
 
@@ -22,10 +23,6 @@ export default function Home() {
 
   const [cars, setCars] = useState(JSON.parse(localStorage.getItem('cars')) || []);
   getCars();
-
-  // useEffect(() => {
-  //   console.log(cars);
-  // }, [cars]);
 
   const carTable = () => cars.map((car, index) => (
     <tr key={index}>
@@ -66,16 +63,7 @@ export default function Home() {
 
       <div className='row'>
 
-
-        <div className='col-md-2 align-self-start  mt-3'>
-          <h5 className='text-center'>My Cars</h5>
-          <ul className="list-group list-group-flush text-left p-2">
-            <li className="list-group-item"><Link to={"/home"} className='text-decoration-none text-dark'>Home</Link></li>
-            <li className="list-group-item"><Link to={"/changePassword"} className='text-decoration-none text-dark'>Change Password</Link></li>
-          </ul>
-        </div>
-
-
+        < LeftNavbar />
 
         <div className='col-md-10 bg-light '>
           <h2 className='mt-3 ms-3 display-3'>My Cars</h2>
