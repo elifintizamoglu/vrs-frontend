@@ -1,43 +1,65 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 export default function Home() {
 
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  console.log(currentUser.userName);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const getCars = async (e) => {
     await axios.get("http://localhost:8080/car/getByUserId/" + currentUser.userId)
       .then((response) => {
-
         localStorage.setItem("cars", JSON.stringify(response.data));
-
       })
-      .catch(() => {
-        console.log("bir hata var");
+      .catch((error) => {
+        console.log("User does not have any cars yet! " + error);
+        setErrorMessage("You don't have any cars yet!");
       })
   };
 
+  const [cars, setCars] = useState(JSON.parse(localStorage.getItem('cars')) || []);
   getCars();
-  const cars = JSON.parse(localStorage.getItem('cars'));
-  console.log(cars);
+
+  // useEffect(() => {
+  //   console.log(cars);
+  // }, [cars]);
+
+  const carTable = () => cars.map((car, index) => (
+    <tr key={index}>
+      <td>{car.carName}</td>
+      <td>{car.brand}</td>
+      <td>{car.model}</td>
+      <td>{car.year}</td>
+      <td>{car.numberPlate}</td>
+      <td>
+        <FontAwesomeIcon icon={faTrash} onClick={() => handleDelete(index)} />&nbsp;
+        <FontAwesomeIcon icon={faPenToSquare} />
+      </td>
+    </tr>
+  ));
 
   const handleDelete = async (index) => {
     const selectedCar = cars[index];
-    console.log(selectedCar.carId);
 
     await axios.delete("http://localhost:8080/car/delete/" + selectedCar.carId)
       .then((response) => {
+        var updatedArray = cars.filter(item => item !== selectedCar);
+        localStorage.setItem("cars", JSON.stringify(updatedArray));
+        setCars(updatedArray);
         console.log("Car deleted succesfully.");
+        carTable(cars);
       })
-      .catch(() => {
-        console.log("bir hata var");
+      .catch((error) => {
+        console.log(" Delete operation could not be operated:  " + error);
       })
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+  };
 
   return (
     <div className='home overflow-hidden'>
@@ -67,8 +89,14 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-            <div className='col-md-8'>
+            <div className='col-md-3'>
               <input type="text" placeholder="Search..." className='border-0' />
+            </div>
+            <div className='col-md-3'>
+              <p>{currentUser.firstName} {currentUser.lastName}</p>
+            </div>
+            <div className='col-md-3'>
+              <Link to="/login" className="btn btn-danger text-decoration-none ms-2" onClick={handleLogout}>Log out</Link>
             </div>
           </div>
 
@@ -81,7 +109,7 @@ export default function Home() {
 
           <div className='row'>
             <div className='col-md-12 p-4'>
-              <table class="table table-hover" >
+              <table className="table table-hover" id='carTable'>
                 <thead>
                   <tr>
                     <th scope="col">Car Name</th>
@@ -89,21 +117,12 @@ export default function Home() {
                     <th scope="col">Model</th>
                     <th scope="col">Year</th>
                     <th scope="col">Number Plate</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {cars.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.carName}</td>
-                      <td>{item.brand}</td>
-                      <td>{item.model}</td>
-                      <td>{item.year}</td>
-                      <td>{item.numberPlate}</td>
-                      <td>
-                        <FontAwesomeIcon icon={faTrash} onClick={() => handleDelete(index)} />
-                      </td>
-                    </tr>
-                  ))}
+                  {carTable(cars)}
+                  {errorMessage && <div className="error-message text-center text-danger">{errorMessage}</div>}
                 </tbody>
               </table>
             </div>
