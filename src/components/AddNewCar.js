@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import LeftNavbar from './LeftNavbar'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -34,6 +34,9 @@ export default function AddNewCar() {
   const OnInputChange = (e) => {
     setCar({ ...car, [e.target.name]: e.target.value });
   }
+
+  const navigate = useNavigate();
+  const handleCancel = () => navigate("/home");
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -110,7 +113,7 @@ export default function AddNewCar() {
 
           <div className='mb-3 px-4'>
             <button type='submit' className='btn btn-primary mb-3 me-3' >Save</button>
-            <button type='cancel' className='btn btn-secondary mb-3'>Cancel</button>
+            <button type='cancel' className='btn btn-secondary mb-3' onClick={() => handleCancel()}>Cancel</button>
             {successMessage && <div className="success-message text-center text-success ">{successMessage}</div>}
             {errorMessage && <div className="error-message text-center text-danger">{errorMessage}</div>}
           </div>

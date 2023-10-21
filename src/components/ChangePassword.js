@@ -27,6 +27,7 @@ export default function ChangePassword() {
   };
 
   const navigate = useNavigate();
+  const handleCancel = () => navigate("/home");
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -93,7 +94,7 @@ export default function ChangePassword() {
 
           <div className='mb-3 px-4'>
             <button type='submit' className='btn btn-primary mb-3 me-3' >Save</button>
-            <button type='cancel' className='btn btn-secondary mb-3' onClick={navigate("/home")}>Cancel</button>
+            <button type='cancel' className='btn btn-secondary mb-3' onClick={() => handleCancel()}>Cancel</button>
             {successMessage && <div className="success-message text-center text-success ">{successMessage}</div>}
             {errorMessage && <div className="error-message text-center text-danger">{errorMessage}</div>}
           </div>
