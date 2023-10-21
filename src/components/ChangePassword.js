@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LeftNavbar from './LeftNavbar'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function ChangePassword() {
 
@@ -25,13 +26,18 @@ export default function ChangePassword() {
     });
   };
 
+  const navigate = useNavigate();
+
   const onSubmit = async (e) => {
     e.preventDefault();
     if (currentUser.password === oldPassword) {
       if (newPassword === confirmNewPassword) {
-        const putData = currentUser.userId +"?oldPassword=" + oldPassword + "&newPassword=" + newPassword;
+        const putData = currentUser.userId + "?oldPassword=" + oldPassword + "&newPassword=" + newPassword;
         await axios.put("http://localhost:8080/user/update/" + putData)
           .then(() => {
+            currentUser.password = newPassword
+            console.log(currentUser.password);
+            localStorage.setItem("user", JSON.stringify(currentUser));
             setSuccessMessage('Password is successfully changed');
             setErrorMessage('');
             clearForm();
@@ -87,7 +93,7 @@ export default function ChangePassword() {
 
           <div className='mb-3 px-4'>
             <button type='submit' className='btn btn-primary mb-3 me-3' >Save</button>
-            <button type='cancel' className='btn btn-secondary mb-3' >Cancel</button>
+            <button type='cancel' className='btn btn-secondary mb-3' onClick={navigate("/home")}>Cancel</button>
             {successMessage && <div className="success-message text-center text-success ">{successMessage}</div>}
             {errorMessage && <div className="error-message text-center text-danger">{errorMessage}</div>}
           </div>
