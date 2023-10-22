@@ -2,7 +2,7 @@
 
 - It is a web application project which is developed by using Java and React. In this project, user can sign up, login, update password, make a list of his/her cars, add/delete/update/read the list and see count of cars he/she owns. 
 
-- This repository is frontend part of a fullstack web application project. I made this project as a final project in software development training held by [@Patika.Dev](https://www.patika.dev/tr) and try to use what I have learned in this trainig. [@Backend](https://github.com/elifintizamoglu/VehicleRegistrationSystem) part of the project is here.
+- This repository is frontend part of a fullstack web application project. I made this project as a final project in software development training held by [@Patika.Dev](https://www.patika.dev/tr) and try to use what I have learned in this training. [@Backend](https://github.com/elifintizamoglu/VehicleRegistrationSystem) part of the project is here.
 
 ## What technologies are used while developing frontend?
 
