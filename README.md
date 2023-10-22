@@ -1,4 +1,4 @@
-# Vehicle Registration System - Fronted Part
+# Vehicle Registration System - Frontend Part
 
 - It is a web application project which is developed by using Java and React. In this project, user can sign up, login, update password, make a list of his/her cars, add/delete/update/read the list and see count of cars he/she owns. 
 
