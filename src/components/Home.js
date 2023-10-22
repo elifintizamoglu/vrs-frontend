@@ -38,11 +38,22 @@ export default function Home() {
   };
   getCount();
 
-  const [searchText, setSearchText] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredResults, setFilteredResults] = useState([{}]);
+  const searchItems = (searchValue) => {
+    setSearchInput(searchValue);
+    if (searchInput !== '') {
+      const filteredData = cars.filter((item) => {
+        return Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
+      })
+      setFilteredResults(filteredData)
+    } else {
+      setFilteredResults(cars)
+    }
+    carTable(filteredResults)
+  }
 
-  
-
-  const carTable = (cars) => cars.map((car, index) => (
+  const carTable = (arr) => arr.map((car, index) => (
     <tr key={index}>
       <td>{car.carName}</td>
       <td>{car.brand}</td>
@@ -52,11 +63,6 @@ export default function Home() {
       <td>
         <FontAwesomeIcon icon={faTrash} onClick={() => handleDelete(index)} />&nbsp;
         <FontAwesomeIcon icon={faPenToSquare} onClick={() => handleEdit(index)} />
-        {/* <Link to={{
-          pathname: '/editCar',
-          state:  cars[index] 
-        }} className='text-black' ><FontAwesomeIcon icon={faPenToSquare} /></Link> */}
-
       </td>
     </tr>
   ));
@@ -69,11 +75,6 @@ export default function Home() {
     console.log(typeof selectedCar);
     <EditCar car={selectedCar} />
     navigate("/editCar");
-    // console.log(selectedCar);
-    // <Link to={{
-    //   pathname: '/editCar',
-    //   state: { selectedCar }
-    // }} />
   }
 
 
@@ -107,34 +108,33 @@ export default function Home() {
         <div className='col-md-10 bg-light '>
           <h2 className='mt-3 ms-3 display-3'>My Cars</h2>
 
-          <div className='row'>
-            <div className='col-md-3 bg-light d-flex justify-content-between align-items-center'>
-              <ul className="list-group ">
-                <li className="list-group-item d-flex justify-content-between align-items-center ms-2 me-2">
-                  Count
-                  <span style={{ color: 'black' }} className="badge badge-primary badge-pill">{count}</span>
-                </li>
-              </ul>
+          <div className='row mt-5'>
+
+            <div className='col-md-2'>
+              <Link to="/addNewCar" className="btn btn-outline-primary d-flex justify-content-between align-items-center text-decoration-none ms-3"> + Add New Car</Link>
             </div>
-            <div className='col-md-3'>
-              <input type="text"
-                value={searchText}
-                placeholder="Search..."
-                onChange={(e) => setSearchText(e.target.value)}
-                className='border-0' />
+            <div className='col-md-1 bg-light d-flex justify-content-between align-items-center mb-2'>
+              <span style={{ color: 'black' }} className="badge badge-primary badge-pill">Count: {count}</span>
             </div>
-            <div className='col-md-3'>
-              <p>{currentUser.firstName} {currentUser.lastName}</p>
+            <div className='col-md-6 mt-2 text-end'>
+              <input type="search"
+                value={searchInput}
+                placeholder="Search car..."
+                onChange={(e) => searchItems(e.target.value)}
+                className='border rounded'/>
             </div>
-            <div className='col-md-3'>
+            
+            <div className='col text-end'>
+              <p className='text-end pt-2'><b>{currentUser.firstName} {currentUser.lastName}</b></p>
+            </div>
+            <div className='col'>
               <Link to="/login" className="btn btn-danger text-decoration-none ms-2" onClick={handleLogout}>Log out</Link>
             </div>
+
           </div>
 
           <div className='row'>
-            <div className='col-md-3 p-4'>
-              <Link to="/addNewCar" className="btn btn-outline-primary d-flex justify-content-between align-items-center text-decoration-none ms-2"> + Add New Car</Link>
-            </div>
+
           </div>
 
 
@@ -152,6 +152,7 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
+
                   {carTable(cars)}
                   {errorMessage && <div className="error-message text-center text-danger">{errorMessage}</div>}
                 </tbody>

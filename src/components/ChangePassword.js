@@ -63,7 +63,7 @@ export default function ChangePassword() {
       <div className='col-md-10 bg-light '>
         <h3 className='mt-3 ms-3'><b>Change Password</b></h3>
 
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form onSubmit={(e) => onSubmit(e)} className='mt-5 change-pass-form'>
           <div className='mb-2 px-4'>
             <label htmlFor='OldPassword' className='form-label'>Old Password:</label>
             <input type='password'
@@ -93,8 +93,8 @@ export default function ChangePassword() {
           </div>
 
           <div className='mb-3 px-4'>
-            <button type='submit' className='btn btn-primary mb-3 me-3' >Save</button>
-            <button type='cancel' className='btn btn-secondary mb-3' onClick={() => handleCancel()}>Cancel</button>
+            <button type='submit' className='btn btn-primary mb-3 me-3 change-btn' >Save</button>
+            <button type='cancel' className='btn btn-secondary mb-3 change-btn' onClick={() => handleCancel()}>Cancel</button>
             {successMessage && <div className="success-message text-center text-success ">{successMessage}</div>}
             {errorMessage && <div className="error-message text-center text-danger">{errorMessage}</div>}
           </div>
