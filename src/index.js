@@ -9,6 +9,7 @@ import Login from './components/Login';
 import Home from './components/Home';
 import AddNewCar from './components/AddNewCar';
 import ChangePassword from './components/ChangePassword';
+import EditCar from './components/EditCar';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "changePassword",
     element: <ChangePassword/>
+  },
+  {
+    path: "editCar",
+    element: <EditCar/>
   },
 ]);
 

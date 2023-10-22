@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import LeftNavbar from './LeftNavbar';
+import { useNavigate } from 'react-router-dom';
+import EditCar from './EditCar';
 
 export default function Home() {
 
@@ -24,7 +26,23 @@ export default function Home() {
   const [cars, setCars] = useState(JSON.parse(localStorage.getItem('cars')) || []);
   getCars();
 
-  const carTable = () => cars.map((car, index) => (
+  const [count, setCount] = useState('');
+  const getCount = async (e) => {
+    await axios.get("http://localhost:8080/car/getByUserId/count/" + currentUser.userId)
+      .then((response) => {
+        setCount(response.data);
+      })
+      .catch((error) => {
+        console.log(" There is an error  " + error);
+      })
+  };
+  getCount();
+
+  const [searchText, setSearchText] = useState('');
+
+  
+
+  const carTable = (cars) => cars.map((car, index) => (
     <tr key={index}>
       <td>{car.carName}</td>
       <td>{car.brand}</td>
@@ -33,14 +51,34 @@ export default function Home() {
       <td>{car.numberPlate}</td>
       <td>
         <FontAwesomeIcon icon={faTrash} onClick={() => handleDelete(index)} />&nbsp;
-        <FontAwesomeIcon icon={faPenToSquare} />
+        <FontAwesomeIcon icon={faPenToSquare} onClick={() => handleEdit(index)} />
+        {/* <Link to={{
+          pathname: '/editCar',
+          state:  cars[index] 
+        }} className='text-black' ><FontAwesomeIcon icon={faPenToSquare} /></Link> */}
+
       </td>
     </tr>
   ));
 
+  const navigate = useNavigate();
+
+  const handleEdit = (index) => {
+    const selectedCar = cars[index].carName;
+    console.log(selectedCar);
+    console.log(typeof selectedCar);
+    <EditCar car={selectedCar} />
+    navigate("/editCar");
+    // console.log(selectedCar);
+    // <Link to={{
+    //   pathname: '/editCar',
+    //   state: { selectedCar }
+    // }} />
+  }
+
+
   const handleDelete = async (index) => {
     const selectedCar = cars[index];
-
     await axios.delete("http://localhost:8080/car/delete/" + selectedCar.carId)
       .then((response) => {
         var updatedArray = cars.filter(item => item !== selectedCar);
@@ -48,6 +86,7 @@ export default function Home() {
         setCars(updatedArray);
         console.log("Car deleted succesfully.");
         carTable(cars);
+        getCount();
       })
       .catch((error) => {
         console.log(" Delete operation could not be operated:  " + error);
@@ -73,12 +112,16 @@ export default function Home() {
               <ul className="list-group ">
                 <li className="list-group-item d-flex justify-content-between align-items-center ms-2 me-2">
                   Count
-                  <span style={{ color: 'black' }} className="badge badge-primary badge-pill">{14}</span>
+                  <span style={{ color: 'black' }} className="badge badge-primary badge-pill">{count}</span>
                 </li>
               </ul>
             </div>
             <div className='col-md-3'>
-              <input type="text" placeholder="Search..." className='border-0' />
+              <input type="text"
+                value={searchText}
+                placeholder="Search..."
+                onChange={(e) => setSearchText(e.target.value)}
+                className='border-0' />
             </div>
             <div className='col-md-3'>
               <p>{currentUser.firstName} {currentUser.lastName}</p>
